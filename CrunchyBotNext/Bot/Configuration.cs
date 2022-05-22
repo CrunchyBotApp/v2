@@ -11,5 +11,6 @@ namespace CrunchyBotNext.Bot
         public string DiscordToken { get; init; }
         public string Prefix { get; init; }
         public string? SentryDsn { get; init; }
+        public string TenorAPIKey { get; init; }
     }
 }
