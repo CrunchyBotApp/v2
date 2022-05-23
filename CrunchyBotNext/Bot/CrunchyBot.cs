@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using CrunchyBotNext.Services;
+using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Sentry;
@@ -32,14 +33,18 @@ namespace CrunchyBotNext.Bot
         {
             TClient client = _services.GetRequiredService<TClient>();
 
+            _services.GetRequiredService<LoggerService>().Initialise();
+            await _services.GetRequiredService<CommandHandlerService>().Initialise();
+            _services.GetRequiredService<BaseService<DiscordSocketClient>>().Initialise();
+
             Log.Information("[BootAsync] BUILDIN' THE SENTRY!");
 
             SentrySdk.Init(c =>
             {
                 c.Dsn = _config.SentryDsn;
-                c.Debug = true;
                 c.TracesSampleRate = 1.0d; // TODO: reduce this value in prod
             });
+
 
             await client.LoginAsync(TokenType.Bot, _config.DiscordToken);
             await client.StartAsync();

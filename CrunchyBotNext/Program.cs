@@ -1,5 +1,6 @@
 ﻿using CrunchyBotNext.Bot;
 using CrunchyBotNext.Services;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,9 +15,16 @@ public class Program
     private static async Task MainAsync(string[] args)
     {
         ServiceProvider services = new ServiceCollection()
+            .AddSingleton(new DiscordSocketConfig()
+            {
+                MessageCacheSize = 100,
+                GatewayIntents = GatewayIntents.AllUnprivileged
+            })
             .AddSingleton<CommandService>()
             .AddSingleton<DiscordSocketClient>()
+            .AddSingleton<CommandHandlerService>()
             .AddSingleton<LoggerService>()
+            .AddSingleton<BaseService<DiscordSocketClient>>()
             .BuildServiceProvider();
 
         CrunchyBot<DiscordSocketClient> bot = new(await JsonConfigurationManager.GetConfiguration() ?? new Configuration(), services);
