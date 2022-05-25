@@ -4,16 +4,14 @@ using Sentry;
 
 namespace CrunchyBotNext.Services
 {
-    public class BaseService<TClient>
-        where TClient : DiscordSocketClient
-        // where TClient : DiscordShardedClient
+    public class BaseService
     {
-        private readonly TClient _client;
+        private readonly DiscordSocketClient _client;
         private Timer _timer;
         private int _statusIndex = 0;
         private List<Game> statuses;
 
-        public BaseService(TClient client)
+        public BaseService(DiscordSocketClient client)
         {
             _client = client;
         }

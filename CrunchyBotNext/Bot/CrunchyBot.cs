@@ -35,7 +35,7 @@ namespace CrunchyBotNext.Bot
 
             _services.GetRequiredService<LoggerService>().Initialise();
             await _services.GetRequiredService<CommandHandlerService>().Initialise();
-            _services.GetRequiredService<BaseService<DiscordSocketClient>>().Initialise();
+            _services.GetRequiredService<BaseService>().Initialise();
 
             Log.Information("[BootAsync] BUILDIN' THE SENTRY!");
 

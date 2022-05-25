@@ -24,7 +24,7 @@ public class Program
             .AddSingleton<DiscordSocketClient>()
             .AddSingleton<CommandHandlerService>()
             .AddSingleton<LoggerService>()
-            .AddSingleton<BaseService<DiscordSocketClient>>()
+            .AddSingleton<BaseService>()
             .BuildServiceProvider();
 
         CrunchyBot<DiscordSocketClient> bot = new(await JsonConfigurationManager.GetConfiguration() ?? new Configuration(), services);

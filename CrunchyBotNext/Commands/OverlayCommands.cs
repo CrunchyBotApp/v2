@@ -17,7 +17,7 @@ namespace CrunchyBotNext.Commands
     [Summary("Overlays")]
     public class OverlayCommands : ModuleBase<SocketCommandContext>
     {
-        [Command("gayify")]
+        [Command("gayify", RunMode = RunMode.Async)]
         [Summary("I think it should be pretty obvious what this command does")]
         [Alias("gay", "pride", "prideflag", "gayflag", "rainbowflag")]
         public async Task Gayify(int factor = 1, bool trueCrunch = true)
@@ -40,7 +40,7 @@ namespace CrunchyBotNext.Commands
             });
         }
 
-        [Command("eaten")]
+        [Command("eaten", RunMode = RunMode.Async)]
         [Summary("This man clearly doesn't want to draw them being eaten 😱😱😱")]
         public async Task Eaten()
         {
