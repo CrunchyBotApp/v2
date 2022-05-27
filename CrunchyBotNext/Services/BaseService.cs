@@ -21,7 +21,6 @@ namespace CrunchyBotNext.Services
             statuses = new()
             {
                 new Game("c-help", ActivityType.Listening),
-                new Game($"with images in {_client.Guilds.Count} guilds"),
                 new Game($"with images"),
                 new Game($"CrunchCon {DateTime.Now.Year}", ActivityType.Competing),
                 new Game("do not ingest lethal chemicals"),
@@ -45,6 +44,11 @@ namespace CrunchyBotNext.Services
                     null,
                     TimeSpan.FromSeconds(1),
                     TimeSpan.FromSeconds(15));
+            };
+
+            _client.JoinedGuild += async (guild) =>
+            {
+                await guild.DefaultChannel.SendFileAsync("OtherAssets/Hewllo.mp4", "thank you for inviting crunchybot\nrun c-help for a list of commands and remember to PAY YOUR TAXE-");
             };
         }
     }

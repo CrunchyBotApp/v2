@@ -22,6 +22,9 @@
     <None Update="crunchyconfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="OtherAssets\Hewllo.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="OverlayImages\eaten.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
