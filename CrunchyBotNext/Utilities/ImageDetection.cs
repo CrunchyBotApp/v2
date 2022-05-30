@@ -52,10 +52,10 @@ namespace CrunchyBotNext.Utilities
                 return json.results[0].media[0].gif.url;
             }
             else if (giphyURLs.Contains(host)) {
-                return $"https://media0.giphy.com/media/{imageUri.Split("/")[4]}/giphy.gif";
+                return $"https://media0.giphy.com/media/{imageUri.Split("/").Last().Split('-').Last()}/giphy.gif";
             }
             else if (giphyMediaURLs.Contains(host)) {
-                return $"https://media0.giphy.com/media/{imageUri.Split("/")[4]}/giphy.gif";
+                return $"https://media0.giphy.com/media/{imageUri.Split("/").Last().Split('-').Last()}/giphy.gif";
             }
             else
             {
@@ -74,27 +74,41 @@ namespace CrunchyBotNext.Utilities
             string Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
             Regex Rgx = new Regex(Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-            var message =
-                messages.First(
-                    m => 
-                        Rgx.IsMatch(m.Content)
-                        || m.Attachments.Any()
-                        );
+            try
+            {
+                if (Context.Message.Attachments.Any())
+                {
+                    return new Uri(Context.Message.Attachments.ToList()[0].ProxyUrl);
+                }
 
-            Uri? uri;
+                var message =
+                    messages.First(
+                        m => 
+                            Rgx.IsMatch(m.Content)
+                            || m.Attachments.Any()
+                            );
 
-            _ = (Uri.TryCreate(message.Content, UriKind.Absolute, out uri))
-                ? uri = new Uri(
-                    await ImageDetection.GetImage(message.Content)) // gets proper tenor or giphy urls for downloading
-                : (Context.Message.Attachments.Any())
-                    ? uri = new Uri(Context.Message.Attachments.ToList()[0].ProxyUrl)
-                    : (message.Attachments.Any())
-                            ? uri = new Uri(message.Attachments.ToList()[0].ProxyUrl)
-                            : uri = null;
+                Uri? uri;
 
-            if (uri == null) throw new Exception("Couldn't find anything. Send an image and try again ;)");
+                _ = (Uri.TryCreate(message.Content, UriKind.Absolute, out uri))
+                    ? uri = new Uri(
+                        await ImageDetection.GetImage(message.Content)) // gets proper tenor or giphy urls for downloading
+                    : (Context.Message.Attachments.Any())
+                        ? uri = new Uri(Context.Message.Attachments.ToList()[0].ProxyUrl)
+                        : (message.Attachments.Any())
+                                ? uri = new Uri(message.Attachments.ToList()[0].ProxyUrl)
+                                : uri = null;
 
-            return uri;
+                return uri;
+            }
+            catch (ArgumentNullException e)
+            {
+                throw new Exception("No images have been found within the last 100 messages. Please try sending an image and then run the command again.");
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
     }
 }
